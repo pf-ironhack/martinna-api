@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 require("dotenv").config();
+=======
+require('dotenv').config();
+>>>>>>> feat/list-brands
 
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+<<<<<<< HEAD
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
@@ -17,16 +22,32 @@ require('./configs/passport.config');
 const homeRouter = require('./routes/home.routes'); // add routes
 
 
+=======
+const mongoose = require('mongoose');
+const passport = require('passport');
+
+>>>>>>> feat/list-brands
 const app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+require('dotenv').config();
+
+
+
+const brandRoutes = require('./routes/brand.routes');
+// const cardsRoutes = require('./routes/cards.routes');
+// const authRoutes = require('./routes/auth.routes');
+
+require('./configs/db.config');
+const session = require('./configs/session.config');
+// const cors = require('./configs/cors.config');
+// require('./configs/passport.config');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+<<<<<<< HEAD
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'SuperSecret - (Change it)',
@@ -55,21 +76,48 @@ app.use('/', homeRouter); // add routes
 
 
 // weatherUtils.getWeatherData();
+=======
+// app.use(cors);
 
-// catch 404 and forward to error handler
+app.use(session);
+// app.use(passport.initialize());
+// app.use(passport.session());
+
+app.use('/brand', brandRoutes);
+// app.use('/cards', cardsRoutes);
+// app.use('/', authRoutes);
+>>>>>>> feat/list-brands
+
+app.use((req, res, next) => {
+  res.locals.session = req.user;
+  next();
+})
+
+// 404
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (error, req, res, next) {
+  console.error(error);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(error.status || 500);
+
+  const data = {}
+
+  if (error instanceof mongoose.Error.ValidationError) {
+    res.status(400);
+    for (field of Object.keys(error.errors)) {
+      error.errors[field] = error.errors[field].message
+    }
+    data.errors = error.errors
+  } else if (error instanceof mongoose.Error.CastError) {
+    error = createError(404, 'Resource not found')
+  }
+
+  data.message = error.message;
+  res.json(data);
 });
 
 module.exports = app;
