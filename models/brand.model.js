@@ -1,17 +1,14 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const SALT_WORK_FACTOR = 10;
-
 
 
 const brandSchema = new mongoose.Schema({
   title: {
     type: String,
-    // required: true,
+    required: true,
     maxlength: 40
   },
   logo: {
-    type: String,
+    type: String
   },
   description: {
     type: String,
@@ -43,10 +40,26 @@ const brandSchema = new mongoose.Schema({
   launchingDeals: {
     type: String,
     maxlength: 260
+  },
+  userLikes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+
+
+},{
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (doc, ret) => {
+      ret.id = doc._id;
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    }
   }
+})
 
-
-},{ timestamps: true })
+brandSchema.virtual('likes').get(function() {
+  return this.userLikes.length;
+})
 
 const Brand = mongoose.model("Brand", brandSchema);
 module.exports = Brand;

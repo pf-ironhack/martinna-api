@@ -5,11 +5,6 @@ const Brand = require('../models/brand.model');
 const brands = require('./stores.json');
 
 
-  
-
-
-
-
 
 Brand.create(brands)
   .then(console.info)
