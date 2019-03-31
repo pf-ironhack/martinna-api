@@ -39,3 +39,27 @@ module.exports.create = (req, res, next) => {
     .catch(next);
 }
 
+module.exports.update = (req, res, next) => {
+  Brand.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(brand => {
+      if (!brand) {
+        throw createError(404, 'brand not found');
+      } else {
+        res.json(brand);
+      }
+    })
+    .catch(next);
+}
+
+
+module.exports.delete = (req, res, next) => {
+  Brand.findByIdAndDelete(req.params.id)
+    .then(brand => {
+      if (!brand) {
+        throw createError(404, 'Card not found');
+      } else {
+        res.status(204).json();
+      }
+    })
+    .catch(next);
+}

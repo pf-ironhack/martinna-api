@@ -5,7 +5,7 @@ const brandSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    maxlength: 40
+    maxlength: 200
   },
   logo: {
     type: String
@@ -28,8 +28,11 @@ const brandSchema = new mongoose.Schema({
   gallery: {
     type: Array,
   },
-  links: {
-    type: Array
+  webLink: {
+    type: String
+  },
+  socialLinks: {
+    type: String
   },
   creators: {
     type: Array
