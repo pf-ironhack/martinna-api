@@ -6,6 +6,27 @@ module.exports.list = (req, res, next) => {
     .catch(next)
 }
 
+module.exports.listCategories = (req, res, next) => {
+  Brand.find()
+    .then(brands => {
+      const t = brands.map(brand => {
+        return brand.tags[0]
+      })
+
+      const distinctCategories = [...new Set(t)]
+
+      res.json(distinctCategories)
+    })
+    .catch(next)
+}
+
+module.exports.listSneakers = (req, res, next) => {
+  Brand.find({tags: 'Sneakers and Shoes'})
+    .sort({likes: 1})
+    .then(brands => res.json(brands))
+    .catch(next)
+}
+
 module.exports.like = (req, res, next) => {
   Brand.findById(req.params.id)
     .then(brand => {

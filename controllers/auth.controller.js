@@ -3,7 +3,6 @@ const createError = require('http-errors');
 const passport = require('passport');
 
 module.exports.register = (req, res, next) => {
-  console.log(req.body);
   const { email } = req.body;
   User.findOne({ email: email })
     .then(user => {
