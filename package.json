@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "DEBUG=martinna-api:* nodemon ./bin/www"
   },
   "dependencies": {
     "axios": "^0.18.0",

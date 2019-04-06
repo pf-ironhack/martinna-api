@@ -44,7 +44,7 @@ app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/brand', brandRoutes);
+app.use('/brands', brandRoutes);
 app.use('/', authRoutes);
 
 app.use((req, res, next) => {

@@ -1,8 +1,16 @@
 const Brand = require('../models/brand.model');
 
 module.exports.list = (req, res, next) => {
-  Brand.find()
-    .then(brands => res.json(brands))
+  const creteria = {};
+  const { tag } = req.query;
+  if (tag) {
+    creteria.tags = tag;
+  }
+  Brand.find(creteria)
+    .then(brands => {
+      brands = brands.sort((b1, b2) => b2.likes - b1.likes)
+      res.json(brands);
+    })
     .catch(next)
 }
 
@@ -20,12 +28,12 @@ module.exports.listCategories = (req, res, next) => {
     .catch(next)
 }
 
-module.exports.listSneakers = (req, res, next) => {
-  Brand.find({tags: 'Sneakers and Shoes'})
-    .sort({likes: 1})
-    .then(brands => res.json(brands))
-    .catch(next)
-}
+// module.exports.listSneakers = (req, res, next) => {
+//   Brand.find({tags: 'Sneakers and Shoes'})
+//     .sort({likes: 1})
+//     .then(brands => res.json(brands))
+//     .catch(next)
+// }
 
 module.exports.like = (req, res, next) => {
   Brand.findById(req.params.id)
