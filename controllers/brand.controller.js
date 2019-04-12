@@ -1,18 +1,31 @@
 const Brand = require('../models/brand.model');
 
 module.exports.list = (req, res, next) => {
-  const creteria = {};
-  const { tag } = req.query;
+  const criteria = {};
+  const { tag, startDate, endDate } = req.query;
+
   if (tag) {
-    creteria.tags = tag;
+    criteria.tags = tag;
   }
-  Brand.find(creteria)
+
+  if (startDate) {
+    criteria.createdAt = criteria.createdAt || {};
+    criteria.createdAt.$gte = new Date(startDate)
+  }
+  if (endDate) {
+    criteria.createdAt = criteria.createdAt || {};
+    criteria.createdAt.$lte = new Date(endDate)
+  }
+
+  Brand.find(criteria).limit(10)
     .then(brands => {
       brands = brands.sort((b1, b2) => b2.likes - b1.likes)
       res.json(brands);
     })
     .catch(next)
 }
+
+//{ "createdAt": { "$gte": new Date("01 Mar 2019 02:30:00 GMT"), "$lte": new Date() }}
 
 module.exports.listCategories = (req, res, next) => {
   Brand.find()

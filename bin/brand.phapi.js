@@ -5,7 +5,7 @@ const createError = require('http-errors');
 const Brand = require('../models/brand.model');
 const axios = require('axios');
 const PH_TOKEN = process.env.PH_TOKEN;
-const topic = 74;
+const topic = 59;
 const API_URL = `https://api.producthunt.com/v1/posts/all?search[topic]=${topic}&access_token=${PH_TOKEN}`
 
 axios.get(API_URL)
