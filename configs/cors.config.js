@@ -1,8 +1,11 @@
 const createError = require('http-errors');
 const cors = require('cors');
 
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL
+
 const allowedOrigins = [
-  "http://localhost:3000"
+  REACT_APP_API_URL,
+
 ]
 
 module.exports = cors({
