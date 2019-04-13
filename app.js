@@ -6,7 +6,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('./configs/session.config');
-const cors = require('./configs/cors.config')
+const cors = require('cors')
+const corsConfig = require('./configs/cors.config')
 const passport = require("passport");
 const mongoose = require("mongoose");
 
@@ -27,7 +28,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors);
+app.use(cors(corsConfig));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(passport.initialize());
@@ -37,8 +38,6 @@ app.use((req, res, next) => {
   res.locals.session = req.user;
   next();
 })
-
-// app.use(cors);
 
 app.use(session);
 app.use(passport.initialize());
